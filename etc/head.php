@@ -1,7 +1,7 @@
 <?php
 	header("Access-Control-Allow-Origin: *");
 
-	$revision = trim(file_get_contents(".git/refs/heads/main"));
+	$revision = trim(file_get_contents(".git/refs/heads/master"));
 ?>
 <title>HNSChat</title>
 <meta charset="utf-8">
