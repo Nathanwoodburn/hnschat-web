@@ -89,6 +89,9 @@ export class listeners {
 		});
 
 		$("#messageHolder").on("scroll", e => {
+			this.longPress = 0;
+			clearTimeout(this.longPressTimer);
+
 			let messageHolder = $(e.target);
 			if (app.loadingMessages) {
 				return;
