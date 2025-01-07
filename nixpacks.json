@@ -26,7 +26,6 @@
         "nixPkgs": [
           "(php83.withExtensions (pe: pe.enabled ++ []))",
           "apacheHttpd",
-          "apache2-utils",
           "libmysqlclient",
           "php83Packages.composer",
           "nodejs_18",
@@ -42,7 +41,7 @@
       }
     },
     "start": {
-      "cmd": "node /assets/scripts/prestart.mjs /assets/apache.template.conf /etc/apache2/sites-available/000-default.conf && a2enmod proxy_fcgi headers rewrite && (php-fpm -y /assets/php-fpm.conf & apachectl -D FOREGROUND)"
+      "cmd": "node /assets/scripts/prestart.mjs /assets/apache.template.conf /etc/apache2/sites-available/000-default.conf && (php-fpm -y /assets/php-fpm.conf & apachectl -D FOREGROUND)"
     }
   }
   
