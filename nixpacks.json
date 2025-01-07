@@ -18,7 +18,8 @@
           "setup"
         ],
         "cmds": [
-          "mkdir -p /var/log/apache2 && mkdir -p /var/cache/apache2"
+          "mkdir -p /var/log/apache2 && mkdir -p /var/cache/apache2 && mkdir -p /etc/apache2/sites-available",
+          "cp /assets/apache.template.conf /etc/apache2/sites-available/000-default.conf"
         ]
       },
       "setup": {
