@@ -1,0 +1,46 @@
+{
+    "providers": [],
+    "buildImage": "ghcr.io/railwayapp/nixpacks:ubuntu-1731369831",
+    "variables": {
+      "NIXPACKS_METADATA": "php",
+      "PORT": "80"
+    },
+    "staticAssets": {
+      "apache.template.conf": "<VirtualHost *:${PORT}>\n    ServerName localhost\n    DocumentRoot \"${NIXPACKS_PHP_ROOT_DIR:-/app}\"\n\n    <Directory \"${NIXPACKS_PHP_ROOT_DIR:-/app}\">\n        Options Indexes FollowSymLinks\n        AllowOverride All\n        Require all granted\n    </Directory>\n\n    <FilesMatch \\.php$>\n        SetHandler \"proxy:fcgi://127.0.0.1:9000\"\n    </FilesMatch>\n\n    ErrorLog /dev/stdout\n    CustomLog /dev/stdout combined\n\n    Header always set X-Frame-Options \"SAMEORIGIN\"\n    Header always set X-Content-Type-Options \"nosniff\"\n\n    RewriteEngine On\n    RewriteCond %{REQUEST_FILENAME} !-f\n    RewriteCond %{REQUEST_FILENAME} !-d\n    RewriteRule ^ index.php [QSA,L]\n\n    <FilesMatch \"^\\.(?!well-known).*\">\n        Require all denied\n    </FilesMatch>\n</VirtualHost>",
+      "php-fpm.conf": "[www]\nlisten = 127.0.0.1:9000\nuser = nobody\npm = dynamic\npm.max_children = 50\npm.min_spare_servers = 4\npm.max_spare_servers = 32\npm.start_servers = 18\nclear_env = no\ncatch_workers_output = yes\n",
+      "scripts/config/template.mjs": "import { readFile, writeFile } from \"fs/promises\";\nimport { getNixPath } from \"../util/nix.mjs\";\n\nconst replaceStr = input =>\n    input\n        .replaceAll(/\\${(\\w+)}/g,\n            (_all, name) => process.env[name]\n        )\n        .replaceAll(/\\$!{(\\w+)}/g,\n            (_all, exe) => getNixPath(exe)\n        )\n\nexport async function compileTemplate(infile, outfile) {\n    await writeFile(outfile,\n        replaceStr(await readFile(infile, { encoding: 'utf8' })),\n        { encoding: 'utf8' })\n}\n",
+      "scripts/prestart.mjs": "#!/usr/bin/env node\nimport { compileTemplate } from \"./config/template.mjs\";\nimport { e } from \"./util/cmd.mjs\";\n\nif (process.argv.length != 4) {\n    console.error(`Usage: ${process.argv[1]} <config-file> <output-file>`);\n    process.exit(1);\n}\n\nawait compileTemplate(process.argv[2], process.argv[3]);\nconsole.log(`Server starting on port ${process.env.PORT}`);\n",
+      "scripts/util/cmd.mjs": "import { execSync } from \"child_process\";\nexport const e = cmd => execSync(cmd).toString().replace('\\n', '');"
+    },
+    "phases": {
+      "install": {
+        "dependsOn": [
+          "setup"
+        ],
+        "cmds": [
+          "mkdir -p /var/log/apache2 && mkdir -p /var/cache/apache2"
+        ]
+      },
+      "setup": {
+        "nixPkgs": [
+          "(php83.withExtensions (pe: pe.enabled ++ []))",
+          "apacheHttpd",
+          "libmysqlclient",
+          "php83Packages.composer",
+          "nodejs_18",
+          "npm-9_x"
+        ],
+        "nixLibs": [
+          "libmysqlclient"
+        ],
+        "nixOverlays": [
+          "https://github.com/railwayapp/nix-npm-overlay/archive/main.tar.gz"
+        ],
+        "nixpkgsArchive": "dbc4f15b899ac77a8d408d8e0f89fa9c0c5f2b78"
+      }
+    },
+    "start": {
+      "cmd": "node /assets/scripts/prestart.mjs /assets/apache.template.conf /etc/apache2/sites-available/000-default.conf && a2enmod proxy_fcgi headers rewrite && (php-fpm -y /assets/php-fpm.conf & apachectl -D FOREGROUND)"
+    }
+  }
+  
