@@ -26,6 +26,7 @@
         "nixPkgs": [
           "(php83.withExtensions (pe: pe.enabled ++ []))",
           "apacheHttpd",
+          "apache2-utils",
           "libmysqlclient",
           "php83Packages.composer",
           "nodejs_18",
