@@ -1352,7 +1352,7 @@ export class HNSChat {
 	async upload(data, attachment) {
 		let output = new Promise(resolve => {
 			$.ajax({
-		        url: "https://hns.chat/upload",
+		        url: `${window.location.origin}/upload`,
 		        type: "POST",
 		        data: data,
 		        cache: false,

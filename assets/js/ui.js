@@ -1680,6 +1680,7 @@ export class ui {
 			switch (url.host) {
 				case "hns.chat":
 				case "hnschat":
+				case window.location.host:
 					match = url.pathname.match(/^(\/uploads\/.{32}|\/avatar\/.{16})$/);
 					if (match) {
 						return "image";
