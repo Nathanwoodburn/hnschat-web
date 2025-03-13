@@ -269,7 +269,7 @@
 	function getContents($url) {
 		$curl = curl_init();
         curl_setopt($curl, CURLOPT_URL, $url);
-        curl_setopt($curl, CURLOPT_PROXY, "127.0.0.1:8080");
+        // curl_setopt($curl, CURLOPT_PROXY, "127.0.0.1:8080");
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
         curl_setopt($curl, CURLOPT_FOLLOWLOCATION, TRUE);
         curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 5); 
@@ -283,7 +283,7 @@
 	function getContentsWithCode($url) {
 		$curl = curl_init();
         curl_setopt($curl, CURLOPT_URL, $url);
-        curl_setopt($curl, CURLOPT_PROXY, "127.0.0.1:8080");
+        // curl_setopt($curl, CURLOPT_PROXY, "127.0.0.1:8080");
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
         curl_setopt($curl, CURLOPT_FOLLOWLOCATION, TRUE);
         curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 5); 
@@ -301,7 +301,7 @@
 	function getContentsWithSpoof($url) {
 		$curl = curl_init();
         curl_setopt($curl, CURLOPT_URL, $url);
-        curl_setopt($curl, CURLOPT_PROXY, "127.0.0.1:8080");
+        // curl_setopt($curl, CURLOPT_PROXY, "127.0.0.1:8080");
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
         curl_setopt($curl, CURLOPT_FOLLOWLOCATION, TRUE);
         curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 5); 

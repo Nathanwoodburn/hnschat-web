@@ -269,7 +269,6 @@
 					</div>
 					<div class="actions">
 						<div class="link" data-action="viewVideo">Watch</div>
-						<!-- <div class="link" data-action="startVideo">Stream</div> -->
 						<div class="link" data-action="joinVideo">Join</div>
 						<div class="link destructive" data-action="leaveVideo">Leave</div>
 						<div class="link destructive" data-action="endVideo">End</div>
